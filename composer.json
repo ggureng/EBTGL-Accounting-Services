@@ -1,0 +1,6 @@
+{
+    "require": {
+        "tensorflow/tensorflow": "^0.1.0",
+        "rindow/rindow-math": "^1.0.0"
+    }
+}

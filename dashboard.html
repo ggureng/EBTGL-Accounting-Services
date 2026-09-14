@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBTGL Accounting Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f9fc;
+            color: #333;
+            overflow-x: hidden;
+            padding-bottom: 100px; /* Added padding to avoid content overlap */
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 30px;
+            background: linear-gradient(135deg, #2c3e50, #4a6583);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .navbar-brand img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 12px;
+            border: 2px solid white;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .nav-links a.selected {
+            background-color: #3498db;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            z-index: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .dropdown-content a, .dropdown-content button {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: #333;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .dropdown-content a:hover, .dropdown-content button:hover {
+            background-color: #f1f5f9;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        /* Main Content */
+        .dashboard-content {
+            padding: 100px 30px 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Dashboard Header */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .dashboard-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .dashboard-filters {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .filter-item label {
+            font-weight: 500;
+            color: #4a5568;
+        }
+        
+        .filter-item select {
+            border: none;
+            background: transparent;
+            font-weight: 500;
+            color: #2d3748;
+            outline: none;
+            cursor: pointer;
+        }
+        
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+        
+        .metric-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #718096;
+            margin-bottom: 10px;
+        }
+        
+        .metric-value {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .metric-trend {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+            color: #38a169;
+        }
+        
+        .metric-trend.down {
+            color: #e53e3e;
+        }
+        
+        .metric-subtext {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-top: 5px;
+        }
+        
+        /* Admin Links - Updated to fixed position */
+        .admin-links {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 30px;
+            background: white;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Hide on small screens */
+        @media (max-width: 768px) {
+            .admin-links {
+                grid-template-columns: repeat(3, 1fr);
+                padding: 10px 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .admin-links {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .admin-link {
+            background: linear-gradient(135deg, #4682B4, #5a96cf);
+            border: none;
+            color: white;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            min-height: 80px;
+            justify-content: center;
+        }
+        
+        .admin-link:hover {
+            background: linear-gradient(135deg, #3a6a94, #4c7db8);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        
+        .admin-link i {
+            font-size: 24px;
+        }
+        
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+        
+        .chart-legend {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        /* Full-width chart */
+        .full-chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        /* Popup Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        
+        .popup-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .popup-title {
+            color: #4682B4;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .popup-field {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .popup-field:focus {
+            border-color: #4682B4;
+            outline: none;
+        }
+        
+        .popup-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #4682B4, #5a96cf);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .popup-btn:hover {
+            background: linear-gradient(135deg, #3a6a94, #4c7db8);
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .metrics-grid, .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .dashboard-filters {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 10px 15px;
+            }
+            
+            .nav-links a {
+                padding: 6px 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body onload="initDashboard()">
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-brand">
+            <img src="images/NXT.png" alt="EBTGL Accounting">
+            EBTGL Accounting
+        </div>
+        <div class="nav-links">
+            <a id="home-link" class="selected" onclick="showSection('home')">Dashboard</a>
+            <a id="services-link" onclick="showSection('services')">Services</a>
+            <a id="about-link" onclick="showSection('about')">About</a>
+            
+            <div class="dropdown">
+                <a id="admin-link">Admin</a>
+                <div class="dropdown-content">
+                    <a href="choose-client.php">Choose Client</a>
+                    <a href="manage-client.php">Manage Client</a>
+                    <a href="calendar_admin.php">View Calendar</a>
+                    <a href="account_requests.php">Account Requests</a>
+                    <a href="admin_messages.php">💬 Messages</a>
+                </div>
+            </div>
+            
+            <div class="dropdown">
+                <a id="settings-link">Settings</a>
+                <div class="dropdown-content">
+                    <button class="edit-btn" onclick="showEditAdminPopup()">Edit Admin Account</button>
+                    <button onclick="logout()">Log Out</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-content">
+        <!-- Dashboard Section -->
+        <div id="home">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Executive Dashboard</h1>
+                <div class="dashboard-filters">
+                    <div class="filter-item">
+                        <label>Auto date range</label>
+                        <select>
+                            <option selected>This Month</option>
+                            <option>Last Month</option>
+                            <option>Quarter to Date</option>
+                            <option>Year to Date</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Services</label>
+                        <select>
+                            <option selected>All</option>
+                            <option>Bookkeeping</option>
+                            <option>Financial Reporting</option>
+                            <option>Tax Consulting</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-title">New Wins</div>
+                    <div class="metric-value">230</div>
+                    <div class="metric-trend">
+                        <span>↑ 25%</span>
+                    </div>
+                    <div class="metric-subtext">vs previous 30 days</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-title">Trial:Win Rate</div>
+                    <div class="metric-value">9.86%</div>
+                    <div class="metric-trend">
+                        <span>↑ 25%</span>
+                    </div>
+                    <div class="metric-subtext">vs previous 30 days</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-title">New MRR</div>
+                    <div class="metric-value">$25,690</div>
+                    <div class="metric-trend">
+                        <span>↑ 8.7%</span>
+                    </div>
+                    <div class="metric-subtext">vs previous 30 days</div>
+                </div>
+            </div>
+            
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Page Views</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="pageViewsChart"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #3498db;"></div>
+                            <span>Referral</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #2ecc71;"></div>
+                            <span>Direct</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #e74c3c;"></div>
+                            <span>Organic Search</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">MRR Stats by Country</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="mrrCountryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="full-chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">MRR</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="mrrTrendChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Section -->
+        <div id="services" style="display:none;">
+            <div class="section-container">
+                <h2 class="section-title">Our Accounting Services</h2>
+                <p>We provide comprehensive financial solutions tailored to your business needs. Our expert team ensures accuracy, compliance, and strategic insights for your financial success.</p>
+                
+                <div class="services-grid">
+                    <div class="service-card">
+                        <h3>Bookkeeping</h3>
+                        <p>Accurate recording of financial transactions to keep your business finances organized and compliant.</p>
+                        <span class="badge">Available Now</span>
+                    </div>
+                    <div class="service-card">
+                        <h3>Financial Reporting</h3>
+                        <p>Detailed financial statements and performance analysis to help you make informed business decisions.</p>
+                        <span class="badge">Available Now</span>
+                    </div>
+                    <div class="service-card">
+                        <h3>Charts of Accounts</h3>
+                        <p>Customized accounting framework to categorize all your business transactions effectively.</p>
+                        <span class="badge">Coming Soon</span>
+                    </div>
+                    <div class="service-card">
+                        <h3>Budget Management</h3>
+                        <p>Strategic planning and monitoring of financial resources to achieve your business objectives.</p>
+                        <span class="badge">Coming Soon</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div id="about" style="display:none;">
+            <div class="section-container">
+                <h2 class="section-title">About EBTGL Accounting Services</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>EBTGL Accounting Services is built on a strong foundation of trust, professionalism, and client satisfaction. Founded in 2010, we've grown from a small team of dedicated accountants to a leading firm serving businesses across the region.</p>
+
+                        <p>Established in 1984, E.B TAROBAL COMPANY GENERAL PROFESSIONAL PARTNERSHIP has grown into a trusted provider of professional accounting and consulting services. Initially operating as a family-targeted business, the firm was formally registered with the Securities and Exchange Commission (SEC) in 1998 as a general professional partnership.</p>
+
+                        <p> Over the years, it has built a strong reputation by offering a comprehensive range of services, including bookkeeping, internal & external auditing, management consulting, tax consulting & etc.. Committed to community development, the firm actively hires and organizes staffing by engaging local talent, particularly individuals seeking employment within barangay communities.</p>
+
+                        <p> To meet the demands of the audit season, project-based auditors are contracted to support external audit engagements, while tax season operations run from January to April 30. Throughout the rest of the year, the firm focuses on providing consulting services through structured retainership arrangements, ensuring continuous support for its clientele.</p>
+                    
+                        <div class="about-highlights">
+                            <div class="highlight-card">
+                                <h4>Our Vision</h4>
+                                <p>To be the leading provider of innovative accounting solutions for growing businesses.</p>
+                            </div>
+                            <div class="highlight-card">
+                                <h4>Core Values</h4>
+                                <p>Integrity, Excellence, Innovation, and Client Focus.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Fixed Admin Action Buttons at Bottom -->
+    <div class="admin-links">
+        <button class="admin-link" onclick="window.location.href='choose-client.php'">
+            <i class="fas fa-users"></i>
+            Choose Client
+        </button>
+        <button class="admin-link" onclick="window.location.href='manage-client.php'">
+            <i class="fas fa-user-cog"></i>
+            Manage Client
+        </button>
+        <button class="admin-link" onclick="window.location.href='calendar_admin.php'">
+            <i class="fas fa-calendar-alt"></i>
+            View Calendar
+        </button>
+        <button class="admin-link" onclick="window.location.href='account_requests.php'">
+            <i class="fas fa-user-plus"></i>
+            Account Requests
+        </button>
+        <button class="admin-link" onclick="window.location.href='admin_messages.php'">
+            <i class="fas fa-comments"></i>
+            Messages
+        </button>
+    </div>
+
+    <!-- Edit Admin Popups -->
+    <div id="email-verification-popup" class="popup-overlay hidden">
+        <div class="popup-container">
+            <span class="popup-close" onclick="closeEmailPopup()">&times;</span>
+            <h2 class="popup-title">Verify Admin Email</h2>
+            <input type="email" id="admin-email" class="popup-field" placeholder="Enter your admin email" required>
+            <button class="popup-btn" onclick="verifyAdminEmail()">Verify Email</button>
+            <div id="email-error" class="error-message hidden">Invalid admin email. Please try again.</div>
+        </div>
+    </div>
+
+    <div id="update-credentials-popup" class="popup-overlay hidden">
+        <div class="popup-container">
+            <span class="popup-close" onclick="closeUpdatePopup()">&times;</span>
+            <h2 class="popup-title">Update Admin Account</h2>
+            <input type="text" id="new-username" class="popup-field" placeholder="New username" required>
+            <input type="password" id="new-password" class="popup-field" placeholder="New password" required>
+            <button class="popup-btn" onclick="updateAdminAccount()">Update Account</button>
+            <div id="update-success" class="error-message" style="color: #27ae60; display: none;">
+                Account updated successfully! You will be logged out.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function initDashboard() {
+            highlightHomeOnLoad();
+            setupCharts();
+        }
+        
+        function setupCharts() {
+            // Page Views Chart
+            const pageViewsCtx = document.getElementById('pageViewsChart').getContext('2d');
+            const pageViewsChart = new Chart(pageViewsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [
+                        {
+                            label: 'Referral',
+                            data: [320, 290, 350, 410, 380, 450],
+                            backgroundColor: '#3498db',
+                        },
+                        {
+                            label: 'Direct',
+                            data: [220, 250, 280, 300, 320, 340],
+                            backgroundColor: '#2ecc71',
+                        },
+                        {
+                            label: 'Organic Search',
+                            data: [180, 210, 240, 270, 300, 330],
+                            backgroundColor: '#e74c3c',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: false,
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // MRR by Country Chart
+            const mrrCountryCtx = document.getElementById('mrrCountryChart').getContext('2d');
+            const mrrCountryChart = new Chart(mrrCountryCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['United States', 'Australia', 'Canada', 'United Kingdom'],
+                    datasets: [{
+                        label: 'MRR (Thousands)',
+                        data: [1400, 1200, 1000, 800],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(46, 204, 113, 0.7)',
+                            'rgba(155, 89, 182, 0.7)',
+                            'rgba(241, 196, 15, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(52, 152, 219, 1)',
+                            'rgba(46, 204, 113, 1)',
+                            'rgba(155, 89, 182, 1)',
+                            'rgba(241, 196, 15, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // MRR Trend Chart
+            const mrrTrendCtx = document.getElementById('mrrTrendChart').getContext('2d');
+            const mrrTrendChart = new Chart(mrrTrendCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan-Feb', 'Mar-Apr', 'May-Jun', 'Jul-Aug', 'Sep-Oct', 'Nov-Dec'],
+                    datasets: [{
+                        label: 'MRR (Thousands)',
+                        data: [12, 19, 15, 22, 18, 25],
+                        backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value + 'K';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function showSection(section) {
+            // Hide all sections
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('services').style.display = 'none';
+            document.getElementById('about').style.display = 'none';
+
+            // Show selected section
+            document.getElementById(section).style.display = 'block';
+
+            // Highlight selected link
+            document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('selected'));
+            document.getElementById(section + '-link').classList.add('selected');
+
+            // Hide any open dropdowns
+            document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+                dropdown.style.display = 'none';
+            });
+        }
+
+        function highlightHomeOnLoad() {
+            document.getElementById('home-link').classList.add('selected');
+        }
+        
+        function logout() {
+            fetch('logout.php')
+            .then(() => {
+                sessionStorage.removeItem("admin_logged_in");
+                window.location.href = "index.html";
+            });
+        }
+        
+        // New functions for admin account edit
+        function showEditAdminPopup() {
+            document.getElementById('email-verification-popup').classList.remove('hidden');
+            document.getElementById('email-error').classList.add('hidden');
+            document.getElementById('admin-email').value = '';
+        }
+        
+        function closeEmailPopup() {
+            document.getElementById('email-verification-popup').classList.add('hidden');
+        }
+        
+        function closeUpdatePopup() {
+            document.getElementById('update-credentials-popup').classList.add('hidden');
+        }
+        
+        function verifyAdminEmail() {
+            const email = document.getElementById('admin-email').value.trim();
+            if (!email) {
+                showEmailError("Please enter your admin email");
+                return;
+            }
+            
+            // Simulate email verification
+            setTimeout(() => {
+                document.getElementById('email-verification-popup').classList.add('hidden');
+                document.getElementById('update-credentials-popup').classList.remove('hidden');
+                document.getElementById('new-username').value = '';
+                document.getElementById('new-password').value = '';
+                document.getElementById('update-success').style.display = 'none';
+            }, 500);
+        }
+
+        function updateAdminAccount() {
+            const newUsername = document.getElementById('new-username').value.trim();
+            const newPassword = document.getElementById('new-password').value.trim();
+            
+            if (!newUsername || !newPassword) {
+                alert("Please enter both username and password");
+                return;
+            }
+            
+            // Show success message
+            document.getElementById('update-success').style.display = 'block';
+            
+            // Log out after a short delay
+            setTimeout(() => {
+                logout();
+            }, 2000);
+        }
+                
+        function showEmailError(message) {
+            const errorElement = document.getElementById('email-error');
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+        }
+    </script>
+    <script>
+        // ✅ Redirect if not logged in
+        if (sessionStorage.getItem("admin_logged_in") !== "true") {
+            window.location.href = "index.html";
+        }
+
+        // ✅ Prevent back button after logout
+        window.onload = function () {
+            history.pushState(null, null, location.href);
+            window.onpopstate = function () {
+                window.location.href = "index.html";
+            };
+        };
+    </script>
+</body>
+</html>

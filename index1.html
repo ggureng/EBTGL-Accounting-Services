@@ -1,0 +1,2350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Client Dashboard - EBTGL Accounting Services</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Updated color palette to match index1.html */
+      --primary: #005B96;
+      --primary-dark: #004a7a;
+      --primary-blue: #005B96;
+      --light-blue: #F0F0F0;
+      --dark-blue: #003355;
+      --primary-light: #4a7ea9;
+      --accent: #F0F0F0;
+      --accent-light: #f8f8f8;
+      --light: #FFFFFF;
+      --dark: #1A1A1A;
+      --gray: #666666;
+      --light-gray: #CCCCCC;
+      --success: #2ecc71;
+      --error: #e74c3c;
+      --shadow-sm: 0 4px 6px rgba(0,0,0,0.05);
+      --shadow-md: 0 6px 12px rgba(0,0,0,0.1);
+      --shadow-lg: 0 15px 30px rgba(0,0,0,0.15);
+      --radius: 10px;
+      --radius-lg: 16px;
+      --transition: all 0.3s ease;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Verdana, Tahoma, Geneva, sans-serif;
+      scroll-behavior: smooth;
+      background-color: #f2f2f2;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* Heading sizes */
+    h1 { font-size: 2rem; }     /* 32px */
+    h2 { font-size: 1.75rem; }  /* 28px */
+    h3 { font-size: 1.5rem; }   /* 24px */
+    h4 { font-size: 1.25rem; }  /* 20px */
+    h5 { font-size: 1.125rem; } /* 18px */
+    h6 { font-size: 1rem; }     /* 16px */
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background-color: var(--primary);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .logo {
+      color: white;
+      font-weight: 700;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+
+    .logo i {
+      font-size: 22px;
+    }
+
+    .logo span {
+      font-weight: bold; /* Remove bold from logo */
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .nav-links a, .nav-links button {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover, .nav-links button:hover {
+      background-color: rgba(255,255,255,0.15);
+      text-decoration: none;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropbtn {
+      background-color: transparent;
+      color: white;
+      padding: 8px 12px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+
+    .dropbtn:hover {
+      background-color: rgba(255,255,255,0.15);
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: white;
+      min-width: 200px;
+      box-shadow: var(--shadow-md);
+      z-index: 1;
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-top: 8px;
+      transition: var(--transition);
+    }
+
+    .dropdown-content a {
+      color: var(--dark);
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      transition: var(--transition);
+      font-weight: 500;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .dropdown-content a:hover {
+      background-color: var(--accent-light);
+      color: var(--primary-dark);
+    }
+
+    .dropdown-content a:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(0,91,150,0.85) 0%, rgba(0,74,122,0.9) 100%), url('images/accounting-hero.jpeg') center/cover no-repeat;
+      min-height: 90vh;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px 20px;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      animation: fadeInUp 1s ease-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      margin-bottom: 40px;
+      max-width: 700px;
+      font-weight: 300;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-btn {
+      padding: 14px 32px;
+      background-color: var(--accent);
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      cursor: button;
+      color: var(--dark);
+      font-weight: 600;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-btn:hover {
+      background-color: white;
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero-btn i {
+      font-size: 1.2rem;
+    }
+
+    .section {
+      padding: 80px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-title h2 {
+      font-size: 2.5rem;
+      color: var(--primary-dark);
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title h2:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .section-title p {
+      font-size: 1.2rem;
+      color: var(--gray);
+      max-width: 700px;
+      margin: 20px auto 0;
+    }
+
+    .info-section {
+      display: flex;
+      flex-direction: column;
+      gap: 70px;
+    }
+
+    .info-block {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 40px;
+      padding: 30px;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .info-block:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .info-block:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .info-block img {
+      width: 45%;
+      border-radius: var(--radius);
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .info-block-content {
+      width: 55%;
+      text-align: justify;
+    }
+
+    .info-block-content h2 {
+      font-size: 1.8rem;
+      color: var(--primary-dark);
+      margin-bottom: 20px;
+    }
+
+    .info-block-content p {
+      font-size: 1.1rem;
+      color: var(--dark);
+      line-height: 1.8;
+    }
+
+    /* FIXED: Chatbox Styles - Fixed z-index issues */
+    .chat-toggle {
+      position: fixed !important;
+      bottom: 30px !important;
+      right: 30px !important;
+      background-color: var(--primary) !important;
+      color: white !important;
+      width: 60px !important;
+      height: 60px !important;
+      border-radius: 50% !important;
+      cursor: pointer !important;
+      z-index: 10000 !important;
+      font-size: 24px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      box-shadow: var(--shadow-md) !important;
+      transition: var(--transition) !important;
+    }
+
+    .chat-toggle:hover {
+      background-color: var(--primary-dark) !important;
+      transform: scale(1.1) !important;
+    }
+
+    .chatbox {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 350px;
+      max-height: 500px;
+      background: white;
+      border-radius: var(--radius-lg);
+      display: none;
+      flex-direction: column;
+      z-index: 9999;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .chatbox.open {
+      display: flex;
+      animation: fadeInUp 0.3s ease-out forwards;
+    }
+
+    .chat-header {
+      background-color: var(--primary);
+      color: white;
+      padding: 20px;
+      font-weight: 600;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-header i {
+      cursor: pointer;
+      font-size: 1.3rem;
+      opacity: 0.8;
+      transition: var(--transition);
+    }
+
+    .chat-header i:hover {
+      opacity: 1;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: var(--light);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      height: 300px;
+      /* Prevent horizontal scrolling */
+      overflow-x: hidden;
+      word-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .chat-input {
+      display: flex;
+      border-top: 1px solid var(--light-gray);
+      background: white;
+      padding: 15px;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid var(--light-gray);
+      border-radius: 50px;
+      font-size: 1rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .chat-input input:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.15);
+    }
+
+    .chat-input button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      cursor: pointer;
+      margin-left: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .chat-input button:hover {
+      background: var(--primary-dark);
+      transform: scale(1.05);
+    }
+
+    .message-bubble {
+      max-width: 80%;
+      padding: 12px 18px;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      word-wrap: break-word;
+      word-break: break-word;
+      position: relative;
+      animation: fadeIn 0.3s ease-out;
+      /* Ensure text wraps properly */
+      overflow-wrap: break-word;
+      hyphens: auto;
+    }
+
+    .message-bubble.you {
+      background-color: var(--primary);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 5px;
+    }
+
+    .message-bubble.admin {
+      background-color: var(--accent-light);
+      color: var(--dark);
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+    }
+
+    /* Unread message styling for client */
+    .unread-msg {
+        background-color: #e8f4fd !important;
+        border-left: 3px solid #2196F3;
+        position: relative;
+    }
+
+    .unread-msg::before {
+        content: '';
+        position: absolute;
+        left: -8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 8px;
+        background-color: #2196F3;
+        border-radius: 50%;
+    }
+
+    /* Scroll to bottom button - CENTERED */
+    .scroll-to-bottom {
+      position: absolute;
+      bottom: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      z-index: 10;
+    }
+
+    .scroll-to-bottom:hover {
+      background: var(--primary-dark);
+      transform: translateX(-50%) scale(1.1);
+    }
+
+    .scroll-to-bottom.visible {
+      display: flex;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    footer {
+      background: linear-gradient(135deg, var(--dark-blue), var(--primary-blue));
+      color: white;
+      padding: 60px 20px 30px;
+      text-align: center;
+      position: relative;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      text-align: left;
+    }
+
+    .footer-column h3 {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .footer-column h3:after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 3px;
+      background: var(--light-blue);
+      margin-top: 10px;
+    }
+
+    .footer-column p, .footer-column a {
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 10px;
+      display: block;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .footer-column a:hover {
+      color: white;
+      transform: translateX(5px);
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 3000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 40px;
+      border-radius: var(--radius-lg);
+      width: 90%;
+      max-width: 500px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      animation: modalFadeIn 0.4s ease-out;
+      max-height: 85vh; /* Added for scrollbar */
+      overflow-y: auto; /* Added for scrollbar */
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--gray);
+      transition: var(--transition);
+    }
+
+    .close-modal:hover {
+      color: var(--dark);
+      transform: rotate(90deg);
+    }
+
+    .modal h2 {
+      margin-bottom: 30px;
+      color: var(--primary);
+      font-size: 1.8rem;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: var(--dark);
+      font-size: 0.95rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid var(--light-gray);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.15);
+      outline: none;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 14px 32px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .notification {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      padding: 18px 28px;
+      border-radius: var(--radius);
+      color: white;
+      font-weight: 600;
+      z-index: 4000;
+      display: none;
+      animation: fadeInOut 3s ease-in-out;
+      box-shadow: var(--shadow-md);
+      max-width: 400px;
+    }
+
+    .notification.success {
+      background-color: var(--success);
+    }
+
+    .notification.error {
+      background-color: var(--error);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0; transform: translateY(-20px); }
+      10%, 90% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Back to top button styles */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(-50%, 20px);
+    }
+    
+    .back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+    }
+    
+    .back-to-top:hover {
+      transform: translate(-50%, -5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+  .file-attachment {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 10px;
+    background-color: #f0f7ff;
+    border-radius: 20px;
+    margin-top: 5px;
+    font-size: 14px;
+  }
+  
+  .file-attachment a {
+    color: var(--primary);
+    text-decoration: none;
+  }
+  
+  .file-attachment a:hover {
+    text-decoration: underline;
+  }
+  
+  .remove-file {
+    color: #e74c3c;
+    cursor: pointer;
+  }
+  .empty-chat {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+  }
+  .message-time {
+    font-size: 0.7rem;
+    opacity: 0.7;
+    margin-top: 5px;
+  }
+  
+  /* Validation styles */
+  .validation-error {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: none;
+  }
+  
+  input.invalid {
+    border-color: var(--error) !important;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15) !important;
+  }
+
+  /* Admin name styling for client chat */
+  .admin-name-indicator {
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    opacity: 0.8;
+    color: #2c5aa0;
+  }
+
+  /* Image attachment styles for client chat */
+  .image-attachment {
+    margin-top: 8px;
+    text-align: center;
+    max-width: 250px;
+  }
+
+  .image-attachment img {
+    max-width: 100%;
+    max-height: 180px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .image-attachment img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+
+  .image-filename {
+    font-size: 0.7rem;
+    color: #666;
+    margin-top: 4px;
+    word-break: break-all;
+  }
+
+  /* File attachment styles */
+  .file-attachment {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background-color: #f0f7ff;
+    border-radius: 12px;
+    margin-top: 6px;
+    font-size: 0.8rem;
+    border: 1px solid #d1e3f8;
+  }
+
+  .file-attachment a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .file-attachment a:hover {
+    text-decoration: underline;
+  }
+
+  .remove-file {
+    color: #e74c3c;
+    cursor: pointer;
+    margin-left: auto;
+  }
+
+  .empty-chat {
+    text-align: center;
+    padding: 30px 20px;
+    color: #666;
+    font-style: italic;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin: 10px;
+  }
+
+  .message-time {
+    font-size: 0.65rem;
+    opacity: 0.7;
+    margin-top: 4px;
+    text-align: right;
+  }
+
+  /* Mobile Menu Styles */
+  .mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+  }
+
+  /* Mobile Navigation Styles */
+  .mobile-nav {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 80%;
+    height: 100vh;
+    background: white;
+    z-index: 2000;
+    transition: var(--transition);
+    padding: 80px 20px 20px;
+    box-shadow: var(--shadow-lg);
+    overflow-y: auto;
+  }
+
+  .mobile-nav.open {
+    left: 0;
+  }
+
+  .mobile-nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1999;
+    display: none;
+  }
+
+  .mobile-nav-overlay.open {
+    display: block;
+  }
+
+  .mobile-nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mobile-nav-links a {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    color: var(--dark);
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: var(--radius);
+    transition: var(--transition);
+    font-size: 16px;
+  }
+
+  .mobile-nav-links a:hover {
+    background-color: var(--accent-light);
+  }
+
+  .mobile-nav-links a i {
+    margin-right: 10px;
+    width: 24px;
+    text-align: center;
+  }
+
+  .close-mobile-nav {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--gray);
+    padding: 5px;
+  }
+
+  /* Mobile Dropdown */
+  .mobile-dropdown {
+    margin-top: 10px;
+    border-top: 1px solid var(--light-gray);
+    padding-top: 10px;
+  }
+
+  .mobile-dropdown a {
+    padding-left: 40px !important;
+    font-size: 0.9rem;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 1024px) {
+    .hero h1 {
+      font-size: 2.8rem;
+    }
+    
+    .hero p {
+      font-size: 1.3rem;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .info-block, .info-block:nth-child(even) {
+      flex-direction: column;
+    }
+    
+    .info-block img, .info-block-content {
+      width: 100%;
+    }
+    
+    .hero h1 {
+      font-size: 2.5rem;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+    }
+
+    .section {
+      padding: 60px 20px;
+    }
+
+    .section-title h2 {
+      font-size: 2.2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    nav {
+      padding: 12px 20px;
+    }
+    
+    .nav-links {
+      display: none;
+    }
+    
+    .mobile-menu-btn {
+      display: block;
+    }
+    
+    .logo span {
+      font-size: 1.1rem;
+    }
+    
+    .chatbox {
+      width: 90%;
+      right: 5%;
+      bottom: 80px;
+      max-height: 70vh;
+    }
+    
+    .hero {
+      min-height: 80vh;
+      text-align: center;
+      padding: 60px 15px;
+    }
+    
+    .hero h1 {
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+    }
+    
+    .hero p {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+    }
+    
+    /* Fix for hero buttons on mobile */
+    .hero-buttons {
+      flex-direction: column;
+      width: 100%;
+      max-width: 300px;
+      gap: 15px;
+      margin: 0 auto;
+    }
+    
+    .hero-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 12px 24px;
+      font-size: 1rem;
+      margin: 0;
+    }
+    
+    .modal-content {
+      padding: 30px 20px;
+      width: 95%;
+    }
+    
+    .form-group input {
+      padding: 12px;
+    }
+    
+    .btn {
+      padding: 12px 24px;
+      width: 100%;
+    }
+    
+    .footer-content {
+      grid-template-columns: 1fr;
+      gap: 30px;
+      text-align: center;
+    }
+    
+    .footer-column h3:after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .back-to-top {
+      bottom: 100px; /* Adjust position to not interfere with chat button */
+    }
+
+    .info-block {
+      padding: 20px;
+      gap: 25px;
+    }
+
+    .info-block-content h2 {
+      font-size: 1.5rem;
+    }
+
+    .info-block-content p {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero h1 {
+      font-size: 1.8rem;
+    }
+    
+    .hero p {
+      font-size: 0.9rem;
+      margin-bottom: 25px;
+    }
+    
+    .section-title h2 {
+      font-size: 1.8rem;
+    }
+    
+    .section-title p {
+      font-size: 1rem;
+    }
+    
+    .notification {
+      right: 15px;
+      left: 15px;
+      max-width: none;
+      padding: 15px 20px;
+    }
+    
+    .chat-toggle {
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+    }
+    
+    .chatbox {
+      bottom: 80px;
+      max-height: 60vh;
+    }
+    
+    .chat-messages {
+      padding: 15px;
+    }
+    
+    .chat-input {
+      padding: 10px;
+    }
+    
+    .back-to-top {
+      bottom: 90px;
+      width: 35px;
+      height: 35px;
+      font-size: 14px;
+    }
+
+    .logo span {
+      display: none;
+    }
+
+    .mobile-nav {
+      width: 85%;
+    }
+
+    footer {
+      padding: 40px 15px 20px;
+    }
+    
+    .info-block {
+      padding: 15px;
+    }
+    
+    .info-block-content {
+      text-align: left;
+    }
+    
+    .mobile-nav-links a {
+      padding: 12px 15px;
+    }
+
+    /* Additional mobile fixes for hero buttons - FIXED OVERLAPPING */
+    .hero-buttons {
+      max-width: 100%;
+      gap: 12px;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .hero-btn {
+      padding: 14px 20px;
+      font-size: 0.95rem;
+      width: 100%;
+      max-width: 280px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+  }
+
+  /* High-resolution mobile devices */
+  @media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    
+    .chatbox {
+      max-height: 50vh;
+    }
+
+    /* Landscape-specific hero button fixes */
+    .hero-buttons {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 100%;
+    }
+    
+    .hero-btn {
+      width: auto;
+      min-width: 180px;
+      margin: 5px;
+      flex: 1;
+      max-width: 45%;
+    }
+  }
+
+  /* Touch device improvements */
+  @media (hover: none) {
+    .hero-btn:hover {
+      transform: none;
+    }
+    
+    .nav-links a:hover, .nav-links button:hover {
+      background-color: transparent;
+    }
+    
+    .chat-toggle:hover {
+      transform: none;
+    }
+    
+    .btn:hover {
+      transform: none;
+    }
+  }
+
+  /* Prevent zoom on input focus on mobile */
+  @media (max-width: 768px) {
+    input, select, textarea {
+      font-size: 16px !important;
+    }
+  }
+  
+  /* Mobile-specific improvements */
+  @media (max-width: 480px) {
+    .hero-content {
+      width: 100%;
+    }
+    
+    .hero-buttons {
+      gap: 10px;
+      width: 100%;
+      padding: 0 10px;
+      box-sizing: border-box;
+    }
+    
+    .info-section {
+      gap: 40px;
+    }
+    
+    .file-attachment {
+      font-size: 12px;
+      padding: 4px 8px;
+    }
+    
+    .message-bubble {
+      max-width: 90%;
+      font-size: 0.9rem;
+      padding: 10px 14px;
+    }
+    
+    .mobile-menu-btn {
+      font-size: 20px;
+    }
+  }
+  
+  /* Extra small devices (phones, 360px and down) */
+  @media (max-width: 360px) {
+    .hero-btn {
+      padding: 12px 16px;
+      font-size: 0.9rem;
+    }
+    
+    .hero-buttons {
+      gap: 8px;
+    }
+    
+    .hero h1 {
+      font-size: 1.6rem;
+    }
+    
+    .hero p {
+      font-size: 0.9rem;
+    }
+  }
+  </style>
+</head>
+<body>
+<!-- Notification element -->
+<div class="notification" id="notification"></div>
+
+<!-- Mobile Navigation Overlay -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+
+<!-- Mobile Navigation -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="close-mobile-nav" onclick="closeMobileNav()">
+    <i class="fas fa-times"></i>
+  </button>
+  
+  <div class="mobile-nav-links">
+    <a href="index1.html"><i class="fas fa-home"></i> Home</a>
+    <a href="servicesinfo1.php"><i class="fas fa-concierge-bell"></i> Services</a>
+    <a href="about1.html"><i class="fas fa-info-circle"></i> About Us</a>
+    
+    <div class="mobile-dropdown">
+      <a href="#" onclick="openEditAccountModal(); closeMobileNav(); return false;">
+        <i class="fas fa-user-edit"></i> Edit Account
+      </a>
+      <a href="#" onclick="logout(); return false;">
+        <i class="fas fa-sign-out-alt"></i> Log Out
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Account Modal -->
+<div class="modal" id="editAccountModal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+    <h2>Edit Account</h2>
+    
+    <form id="accountForm">
+      <div class="form-group">
+        <label for="company_name">Company Name</label>
+        <input type="text" id="company_name" name="company_name" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+        <div class="validation-error" id="emailError"></div>
+      </div>
+      
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" name="phone" pattern="[0-9]*" inputmode="numeric" required>
+        <div class="validation-error" id="phoneError">Please enter only numbers (0-9)</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="position">Position</label>
+        <input type="text" id="position" name="position" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="full_name">Full Name</label>
+        <input type="text" id="full_name" name="full_name" required pattern="[A-Za-z\s]+" title="Please enter only letters">
+        <div class="validation-error" id="nameError">Full Name can only contain letters and spaces</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">New Password (leave blank to keep current)</label>
+        <input type="password" id="password" name="password">
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<nav>
+  <div class="logo">
+    <img src="images/NXT.png" alt="EBTGL Accounting Services">
+    <span>EBTGL Accounting Services</span>
+  </div>
+  <div class="nav-links">
+    <a href="index1.html"><i class="fas fa-home"></i> Home</a>
+    <a href="servicesinfo1.php"><i class="fas fa-concierge-bell"></i> Services</a>
+    <a href="about1.html"><i class="fas fa-info-circle"></i> About Us</a>
+    <div class="dropdown">
+      <button class="dropbtn" id="companyNameBtn">
+        <i class="fas fa-building"></i>
+        <span>Loading...</span>
+        <i class="fas fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+        <a href="#" onclick="openEditAccountModal(); return false;">
+          <i class="fas fa-user-edit"></i> Edit Account
+        </a>
+        <a href="#" onclick="logout(); return false;">
+          <i class="fas fa-sign-out-alt"></i> Log Out
+        </a>
+      </div>
+    </div>
+  </div>
+  <button class="mobile-menu-btn" onclick="openMobileNav()">
+    <i class="fas fa-bars"></i>
+  </button>
+</nav>
+
+<section id="home" class="hero">
+  <div class="hero-content">
+    <h1>Welcome to EBTGL Accounting Services</h1>
+    <p>Reliable. Professional. Accurate.</p>
+    <div class="hero-buttons">
+      <a href="meeting_redirect.php" class="hero-btn">
+        <i class="fas fa-video"></i> Consult Now!
+      </a>
+      <a href="asset.php" class="hero-btn">
+        <i class="fas fa-book"></i> Bookkeep
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section info-section" id="info">
+  <div class="section-title">
+    <h2>Why Choose EBTGL Accounting Services</h2>
+    <p>We provide exceptional accounting services tailored to your business needs</p>
+  </div>
+  
+  <div class="info-block">
+    <img src="images/history.jpg" alt="History of Accounting">
+    <div class="info-block-content">
+      <h2>Brief History of Accounting</h2>
+      <p>Accounting dates back to ancient civilizations. Early forms of bookkeeping were developed in Mesopotamia, Egypt, and Rome. Today, accounting remains essential for financial tracking and transparency. Modern accounting has evolved with technology, but its core principles of accuracy and accountability remain unchanged.</p>
+    </div>
+  </div>
+
+  <div class="info-block">
+    <img src="images/purpose.jpg" alt="Purpose of Accounting">
+    <div class="info-block-content">
+      <h2>Purpose and Description</h2>
+      <p>Accounting is the systematic process of recording, analyzing, and reporting financial transactions. It helps businesses understand their financial position and aids in decision-making, compliance, and planning. With proper accounting, businesses can track performance, manage cash flow, and plan for future growth.</p>
+    </div>
+  </div>
+
+  <div class="info-block">
+    <img src="images/importance.jpg" alt="Importance of Accounting Partners">
+    <div class="info-block-content">
+      <h2>Importance of an Accounting Partner</h2>
+      <p>Having a trusted accounting partner provides expertise, saves time, ensures accuracy, and keeps businesses financially healthy. It allows business owners to focus on growth while staying compliant and profitable. A good accounting partner becomes a strategic advisor, helping navigate complex financial landscapes.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-column">
+      <h3>EBTGL Accounting Services</h3>
+      <p>Providing professional accounting services with accuracy, integrity, and personalized attention to help your business thrive.</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/p/EB-Tarobal-Co-CPAs-100063656455449/"><i class="fab fa-facebook-f"></i></a>
+      </div>
+    </div>
+    
+    <div class="footer-column">
+      <h3>Quick Links</h3>
+      <a href="index1.html">Home</a>
+      <a href="servicesinfo1.php">Services</a>
+      <a href="about1.html">About Us</a>
+    </div>
+    
+    <div class="footer-column">
+      <h3>Our Services</h3>
+      <a href="servicesinfo1.php">Bookkeeping</a>
+      <a href="servicesinfo1.php">Financial Reporting</a>
+    </div>
+    
+    <div class="footer-column">
+      <h3>Contact Us</h3>
+      <p><i class="fas fa-map-marker-alt me-2"></i> Brgy Tibagan, San Juan City</p>
+      <p><i class="fas fa-phone me-2"></i> (02) 8123-4567</p>
+      <p><i class="fas fa-envelope me-2"></i> ebtgl5220712@gmail.com</p>
+      <p><i class="fas fa-clock me-2"></i> Mon-Fri: 8AM - 5PM</p>
+    </div>
+  </div>
+  
+  <div class="copyright">
+    &copy; 2025 EBTGL Accounting Services. All rights reserved.
+  </div>
+</footer>
+
+<!-- Back to top button -->
+<div class="back-to-top" id="backToTop">
+  <i class="fas fa-arrow-up"></i>
+</div>
+
+<div class="chat-toggle" onclick="toggleChat()">
+  <i class="fas fa-comment-dots"></i>
+</div>
+
+<div class="chatbox" id="chatbox">
+  <div class="chat-header">
+    <span>Chat with Admin</span>
+    <i class="fas fa-times" onclick="toggleChat()"></i>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <button class="scroll-to-bottom" id="scrollToBottom" onclick="scrollToBottom()">
+    <i class="fas fa-arrow-down"></i>
+  </button>
+  <div class="chat-input">
+    <input type="text" id="chatInput" placeholder="Type your message...">
+    <label for="fileAttachment" style="cursor: pointer; margin-left: 10px;">
+      <i class="fas fa-paperclip"></i>
+    </label>
+    <input type="file" id="fileAttachment" style="display: none">
+    <button onclick="sendMessage()">
+      <i class="fas fa-paper-plane"></i>
+    </button>
+  </div>
+  <div id="filePreview" style="padding: 5px 15px; background: white; border-top: 1px solid #eee;"></div>
+</div>
+
+<script>
+let selectedFile = null;
+let filePreviewVisible = false;
+let lastMessageCount = 0;
+let messagePollingInterval;
+let badgePollingInterval;
+
+// Mobile navigation functions
+function openMobileNav() {
+  document.getElementById('mobileNav').classList.add('open');
+  document.getElementById('mobileNavOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('mobileNavOverlay').classList.remove('open');
+  document.body.style.overflow = 'auto';
+}
+
+// Open modal and load account data
+function openEditAccountModal() {
+  fetch('get_client_data.php')
+    .then(response => response.json())
+    .then(data => {
+      if(data.success) {
+        document.getElementById('company_name').value = data.company_name || '';
+        document.getElementById('email').value = data.email || '';
+        document.getElementById('phone').value = data.phone || '';
+        document.getElementById('position').value = data.position || '';
+        document.getElementById('full_name').value = data.full_name || '';
+        document.getElementById('editAccountModal').style.display = 'flex';
+        
+        // Clear any previous validation errors
+        document.getElementById('nameError').style.display = 'none';
+        document.getElementById('emailError').style.display = 'none';
+        document.getElementById('phoneError').style.display = 'none';
+        document.getElementById('full_name').classList.remove('invalid');
+        document.getElementById('email').classList.remove('invalid');
+        document.getElementById('phone').classList.remove('invalid');
+      } else {
+        showNotification('Error loading account data', 'error');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      showNotification('Error loading account data', 'error');
+    });
+}
+
+// Close modal
+function closeModal() {
+  document.getElementById('editAccountModal').style.display = 'none';
+}
+
+// Validate full name input
+function validateFullName() {
+  const fullNameInput = document.getElementById('full_name');
+  const nameError = document.getElementById('nameError');
+  const nameValue = fullNameInput.value.trim();
+  
+  // Check if name contains only letters and spaces
+  const lettersOnly = /^[A-Za-z\s]+$/;
+  
+  if (nameValue && !lettersOnly.test(nameValue)) {
+  nameError.style.display = 'block';
+    fullNameInput.classList.add('invalid');
+    return false;
+  } else {
+    nameError.style.display = 'none';
+    fullNameInput.classList.remove('invalid');
+    return true;
+  }
+}
+
+// Validate email input
+function validateEmail() {
+  const emailInput = document.getElementById('email');
+  const emailError = document.getElementById('emailError');
+  const emailValue = emailInput.value.trim();
+  
+  // Basic email validation
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+  if (emailValue && !emailPattern.test(emailValue)) {
+    emailError.textContent = 'Please enter a valid email address';
+    emailError.style.display = 'block';
+    emailInput.classList.add('invalid');
+    return false;
+  } else {
+    emailError.style.display = 'none';
+    emailInput.classList.remove('invalid');
+    return true;
+  }
+}
+
+// Validate phone number input - NEW FUNCTION
+function validatePhone() {
+  const phoneInput = document.getElementById('phone');
+  const phoneError = document.getElementById('phoneError');
+  const phoneValue = phoneInput.value.trim();
+  
+  // Check if phone contains only numbers
+  const numbersOnly = /^[0-9]+$/;
+  
+  if (phoneValue && !numbersOnly.test(phoneValue)) {
+    phoneError.style.display = 'block';
+    phoneInput.classList.add('invalid');
+    return false;
+  } else {
+    phoneError.style.display = 'none';
+    phoneInput.classList.remove('invalid');
+    return true;
+  }
+}
+
+// Restrict phone input to numbers only - NEW FUNCTION
+function restrictPhoneInput(event) {
+  const key = event.key;
+  
+  // Allow: backspace, delete, tab, escape, enter
+  if ([8, 9, 13, 27, 46].includes(event.keyCode) || 
+      // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+      (event.ctrlKey === true && [65, 67, 86, 88].includes(event.keyCode)) ||
+      // Allow: home, end, left, right
+      (event.keyCode >= 35 && event.keyCode <= 39)) {
+    return;
+  }
+  
+  // Ensure it's a number and stop the keypress if not
+  if ((event.shiftKey || (event.keyCode < 48 || event.keyCode > 57)) && 
+      (event.keyCode < 96 || event.keyCode > 105)) {
+    event.preventDefault();
+  }
+}
+
+// Handle form submission
+document.getElementById('accountForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  // Validate inputs before submission
+  const isNameValid = validateFullName();
+  const isEmailValid = validateEmail();
+  const isPhoneValid = validatePhone(); // NEW VALIDATION
+  
+  if (!isNameValid || !isEmailValid || !isPhoneValid) {
+    showNotification('Please correct the validation errors', 'error');
+    return;
+  }
+  
+  const formData = {
+    company_name: document.getElementById('company_name').value,
+    email: document.getElementById('email').value,
+    phone: document.getElementById('phone').value,
+    position: document.getElementById('position').value,
+    full_name: document.getElementById('full_name').value,
+    password: document.getElementById('password').value
+  };
+  
+  fetch('update_client.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+  })
+  .then(response => response.json())
+  .then(data => {
+    if(data.success) {
+      showNotification('Account updated successfully!', 'success');
+      // Update UI with new company name
+      document.getElementById('companyNameBtn').querySelector('span').textContent = formData.company_name;
+      closeModal();
+    } else {
+      // Check if it's an email error
+      if (data.message && data.message.toLowerCase().includes('email')) {
+        document.getElementById('emailError').textContent = data.message;
+        document.getElementById('emailError').style.display = 'block';
+        document.getElementById('email').classList.add('invalid');
+        document.getElementById('email').focus();
+      }
+      showNotification(data.message || 'Error updating account', 'error');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showNotification('Error updating account. Please try again.', 'error');
+  });
+});
+
+// Add input validation listeners
+document.getElementById('full_name').addEventListener('input', validateFullName);
+document.getElementById('email').addEventListener('input', validateEmail);
+document.getElementById('phone').addEventListener('input', validatePhone); // NEW LISTENER
+
+// Add keydown listener to restrict phone input to numbers only
+document.getElementById('phone').addEventListener('keydown', restrictPhoneInput);
+
+// Add paste event listener to sanitize pasted content in phone field
+document.getElementById('phone').addEventListener('paste', function(e) {
+  e.preventDefault();
+  const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+  // Remove non-numeric characters from pasted text
+  const numbersOnly = pastedText.replace(/[^0-9]/g, '');
+  document.execCommand('insertText', false, numbersOnly);
+});
+
+// Notification system
+function showNotification(message, type) {
+  const notification = document.getElementById('notification');
+  notification.textContent = message;
+  notification.className = `notification ${type}`;
+  notification.style.display = 'block';
+  
+  setTimeout(() => {
+    notification.style.display = 'none';
+  }, 3000);
+}
+
+// ====================
+// Back to Top Functionality
+// ====================
+const backToTopBtn = document.getElementById('backToTop');
+
+// Show button when user scrolls down
+window.addEventListener('scroll', function() {
+  const scrollPosition = window.scrollY;
+  const pageHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const scrollPercentage = (scrollPosition / pageHeight) * 100;
+  
+  if (scrollPercentage > 20) {
+    backToTopBtn.classList.add('show');
+  } else {
+    backToTopBtn.classList.remove('show');
+  }
+});
+
+// Scroll to top when clicked
+backToTopBtn.addEventListener('click', function() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+});
+
+// ====================
+// Chat Functionality
+// ====================
+
+function toggleChat() {
+  const chatbox = document.getElementById('chatbox');
+  const isOpen = chatbox.classList.contains('open');
+  
+  if (isOpen) {
+    chatbox.classList.remove('open');
+    setTimeout(() => {
+      chatbox.style.display = 'none';
+    }, 300);
+  } else {
+    chatbox.style.display = 'flex';
+    setTimeout(() => {
+      chatbox.classList.add('open');
+      document.getElementById('chatInput').focus();
+      // Always scroll to bottom when opening chat
+      setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+      // Mark messages as read when opening chat
+      loadMessages(); // This will mark as read because chat is open
+    }, 10);
+  }
+}
+
+document.getElementById('fileAttachment').addEventListener('change', function(e) {
+  if (this.files.length > 0) {
+    selectedFile = this.files[0];
+    showFilePreview();
+  }
+});
+
+function showFilePreview() {
+  if (!selectedFile) return;
+  
+  const preview = document.getElementById('filePreview');
+  preview.innerHTML = `
+    <div class="file-attachment">
+      <i class="fas fa-file"></i>
+      <span>${selectedFile.name}</span>
+      <span class="remove-file" onclick="removeFile()">
+        <i class="fas fa-times"></i>
+      </span>
+    </div>
+  `;
+  filePreviewVisible = true;
+}
+
+function removeFile() {
+  selectedFile = null;
+  document.getElementById('fileAttachment').value = '';
+  document.getElementById('filePreview').innerHTML = '';
+  filePreviewVisible = false;
+}
+
+// Scroll to bottom functionality
+function scrollToBottom() {
+  const chatMessages = document.getElementById('chatMessages');
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  hideScrollToBottomButton();
+}
+
+function hideScrollToBottomButton() {
+  const scrollBtn = document.getElementById('scrollToBottom');
+  scrollBtn.classList.remove('visible');
+}
+
+function showScrollToBottomButton() {
+  const scrollBtn = document.getElementById('scrollToBottom');
+  scrollBtn.classList.add('visible');
+}
+
+function checkScrollPosition() {
+  const chatMessages = document.getElementById('chatMessages');
+  const scrollBtn = document.getElementById('scrollToBottom');
+  
+  // Show scroll button if not at bottom (with 50px threshold)
+  const isAtBottom = chatMessages.scrollHeight - chatMessages.clientHeight <= chatMessages.scrollTop + 50;
+  
+  if (!isAtBottom) {
+    scrollBtn.classList.add('visible');
+  } else {
+    scrollBtn.classList.remove('visible');
+  }
+}
+
+// Define helper functions at the top
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function convertUrlsToLinks(text) {
+  const urlRegex = /(https?:\/\/[^\s<]+)/g;
+  return text.replace(urlRegex, url => {
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer" 
+            style="color: #1a73e8; text-decoration: underline;">${url}</a>`;
+  });
+}
+
+// Function to check if a file is an image
+function isImageFile(fileName) {
+  const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'];
+  const extension = fileName.split('.').pop().toLowerCase();
+  return imageExtensions.includes(extension);
+}
+
+// Function to update unread badge on chat icon
+function updateUnreadBadge() {
+    fetch('get_unread_count.php')
+        .then(response => response.json())
+        .then(data => {
+            const chatToggle = document.querySelector('.chat-toggle');
+            let badge = chatToggle.querySelector('.unread-badge');
+            
+            if (data.unread_count > 0) {
+                if (!badge) {
+                    badge = document.createElement('span');
+                    badge.className = 'unread-badge';
+                    badge.style.position = 'absolute';
+                    badge.style.top = '-5px';
+                    badge.style.right = '-5px';
+                    badge.style.background = 'red';
+                    badge.style.color = 'white';
+                    badge.style.borderRadius = '50%';
+                    badge.style.width = '20px';
+                    badge.style.height = '20px';
+                    badge.style.fontSize = '12px';
+                    badge.style.display = 'flex';
+                    badge.style.alignItems = 'center';
+                    badge.style.justifyContent = 'center';
+                    badge.style.fontWeight = 'bold';
+                    chatToggle.style.position = 'relative';
+                    chatToggle.appendChild(badge);
+                }
+                badge.textContent = data.unread_count;
+            } else if (badge) {
+                badge.remove();
+            }
+        })
+        .catch(error => {
+            console.error('Error updating unread badge:', error);
+        });
+}
+
+// Function to load messages with error handling
+function loadMessages() {
+  const markRead = document.getElementById('chatbox').classList.contains('open') ? '?mark_read=1' : '';
+  
+  fetch('fetch_messages.php' + markRead)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Check if we got an error response
+      if (data.error) {
+        console.error('Server error:', data.error);
+        showNotification('Error loading messages: ' + data.error, 'error');
+        return;
+      }
+      
+      const chatMessages = document.getElementById('chatMessages');
+      const wasAtBottom = chatMessages.scrollHeight - chatMessages.clientHeight <= chatMessages.scrollTop + 10;
+      
+      // Only update if messages have changed
+      if (chatMessages.dataset.messageCount == data.length) return;
+      chatMessages.dataset.messageCount = data.length;
+      
+      chatMessages.innerHTML = '';
+      
+      if (data.length === 0) {
+        chatMessages.innerHTML = '<div class="empty-chat">No messages yet. Start the conversation!</div>';
+        return;
+      }
+      
+      data.forEach(msg => {
+        const senderType = msg.sender === 'You' ? 'you' : 'admin';
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message-bubble', senderType);
+        
+        // Add unread indicator for unread admin messages
+        if (senderType === 'admin' && !msg.is_read_client) {
+          messageDiv.classList.add('unread-msg');
+        }
+        
+        let contentHTML = '';
+        
+        // Add admin name if available for admin messages
+        if (senderType === 'admin' && msg.admin_name) {
+          contentHTML += `<div class="admin-name-indicator">By: ${escapeHtml(msg.admin_name)}</div>`;
+        }
+        
+        // Add message text if exists
+        if (msg.message && msg.message.trim() !== '') {
+          if (senderType === 'admin') {
+            contentHTML += `<div>${convertUrlsToLinks(escapeHtml(msg.message))}</div>`;
+          } else {
+            contentHTML += `<div>${escapeHtml(msg.message)}</div>`;
+          }
+        }
+        
+        // Add file attachment if exists
+        if (msg.attachment_path) {
+          // Extract filename from path
+          const fileName = msg.attachment_path.split('/').pop();
+          const fileExt = fileName.split('.').pop().toLowerCase();
+          const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+          
+          if (imageExtensions.includes(fileExt)) {
+            // Display image preview for image files
+            contentHTML += `
+              <div class="image-attachment">
+                <a href="${msg.attachment_path}" target="_blank">
+                  <img src="${msg.attachment_path}" alt="${fileName}" 
+                       onclick="openImageModal('${msg.attachment_path}')"
+                       onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                </a>
+                <div class="image-filename">${fileName}</div>
+              </div>
+            `;
+          } else {
+            // Regular file attachment for non-image files
+            contentHTML += `
+              <div class="file-attachment">
+                <i class="fas fa-file"></i>
+                <a href="${msg.attachment_path}" download="${fileName}">${fileName}</a>
+              </div>
+            `;
+          }
+        }
+        
+        // Add timestamp
+        if (msg.sent_at) {
+          const sentTime = new Date(msg.sent_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+          contentHTML += `<div class="message-time">${sentTime}</div>`;
+        }
+        
+        messageDiv.innerHTML = contentHTML;
+        chatMessages.appendChild(messageDiv);
+      });
+      
+      // Always scroll to bottom when loading messages unless user has scrolled up
+      const isAtBottom = chatMessages.scrollHeight - chatMessages.clientHeight <= chatMessages.scrollTop + 50;
+      if (isAtBottom || wasAtBottom) {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        hideScrollToBottomButton();
+      } else {
+        showScrollToBottomButton();
+      }
+      
+      // Update unread badge after loading messages
+      updateUnreadBadge();
+    })
+    .catch(error => {
+      console.error('Error loading messages:', error);
+      showNotification('Error loading messages. Please try again.', 'error');
+    });
+}
+
+// Function to open image in modal for full view
+function openImageModal(imageSrc) {
+  // Create modal for image viewing
+  const modal = document.createElement('div');
+  modal.style.position = 'fixed';
+  modal.style.top = '0';
+  modal.style.left = '0';
+  modal.style.width = '100%';
+  modal.style.height = '100%';
+  modal.style.backgroundColor = 'rgba(0,0,0,0.8)';
+  modal.style.display = 'flex';
+  modal.style.justifyContent = 'center';
+  modal.style.alignItems = 'center';
+  modal.style.zIndex = '10000';
+  modal.style.cursor = 'pointer';
+  
+  const img = document.createElement('img');
+  img.src = imageSrc;
+  img.style.maxWidth = '90%';
+  img.style.maxHeight = '90%';
+  img.style.objectFit = 'contain';
+  img.style.borderRadius = '8px';
+  
+  modal.appendChild(img);
+  document.body.appendChild(modal);
+  
+  // Close modal when clicked
+  modal.addEventListener('click', function() {
+    document.body.removeChild(modal);
+  });
+}
+
+// Enhanced send message function
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  
+  // Prevent sending links from client side
+  const linkPattern = /(https?:\/\/|www\.)\S+/i;
+  if (linkPattern.test(text)) {
+    showNotification('Sending links is not allowed', 'error');
+    return;
+  }
+
+  // Check file size
+  if (selectedFile && selectedFile.size > 10 * 1024 * 1024) {
+    showNotification('File size must be less than 10MB', 'error');
+    return;
+  }
+
+  if (!text && !selectedFile) {
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('message', text);
+  
+  if (selectedFile) {
+    formData.append('attachment', selectedFile);
+  }
+
+  // Show sending state
+  const sendBtn = document.querySelector('.chat-input button');
+  const originalHtml = sendBtn.innerHTML;
+  sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  sendBtn.disabled = true;
+
+  // Clear inputs immediately for better UX
+  input.value = '';
+  removeFile();
+
+  fetch('send_message.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // Only reload messages if send was successful
+      loadMessages();
+      // Auto-scroll to bottom after sending
+      setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+    } else {
+      showNotification('Error: ' + (data.message || 'Unknown error'), 'error');
+      // Restore send button
+      sendBtn.innerHTML = originalHtml;
+      sendBtn.disabled = false;
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showNotification('Error sending message', 'error');
+    // Restore send button
+    sendBtn.innerHTML = originalHtml;
+    sendBtn.disabled = false;
+  });
+}
+
+// Optimized message polling
+function checkForNewMessages() {
+  fetch('fetch_messages.php')
+    .then(response => response.json())
+    .then(messages => {
+      if (messages.length !== lastMessageCount) {
+        lastMessageCount = messages.length;
+        loadMessages();
+      }
+      // Always update unread badge
+      updateUnreadBadge();
+    })
+    .catch(error => console.error('Polling error:', error));
+}
+
+// Start polling with initial load
+loadMessages();
+updateUnreadBadge(); // Initial badge update
+messagePollingInterval = setInterval(checkForNewMessages, 3000);
+badgePollingInterval = setInterval(updateUnreadBadge, 5000); // More frequent badge updates
+
+document.getElementById('chatInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+// Add scroll event listener to chat messages
+document.addEventListener('DOMContentLoaded', function() {
+  const chatMessages = document.getElementById('chatMessages');
+  if (chatMessages) {
+    chatMessages.addEventListener('scroll', checkScrollPosition);
+  }
+});
+
+// ====================
+// Logout Functionality
+// ====================
+
+function logout() {
+  // Clear intervals before logout
+  if (messagePollingInterval) clearInterval(messagePollingInterval);
+  if (badgePollingInterval) clearInterval(badgePollingInterval);
+  
+  fetch('logout.php')
+    .then(() => {
+      // Clear session and prevent back navigation
+      sessionStorage.clear();
+      sessionStorage.setItem('logged_out', 'yes');
+      history.pushState(null, null, 'index.html');
+      window.location.href = "index.html";
+    });
+}
+
+// Prevent back navigation after logout
+window.addEventListener('popstate', function() {
+  if (sessionStorage.getItem('logged_out')) {
+    history.go(1); // Forward navigation
+  }
+});
+
+// Load company name
+fetch('companyname.php')
+  .then(response => response.text())
+  .then(name => {
+    document.getElementById('companyNameBtn').querySelector('span').textContent = name || 'My Account';
+  })
+  .catch(() => {
+    document.getElementById('companyNameBtn').querySelector('span').textContent = 'My Account';
+  });
+
+// Close modal when clicking outside
+window.addEventListener('click', function(e) {
+  const modal = document.getElementById('editAccountModal');
+  if (e.target === modal) {
+    closeModal();
+  }
+});
+
+// Prevent modal close when clicking inside
+document.querySelector('.modal-content').addEventListener('click', function(e) {
+  e.stopPropagation();
+});
+
+// Back button handling - modified to include logout check
+window.onload = function () {
+  // Check if we should redirect due to logout
+  if (sessionStorage.getItem('logged_out') === 'yes') {
+    sessionStorage.removeItem('logged_out');
+    window.location.href = "index.html";
+    return;
+  }
+
+  // Push a new state so we can detect back
+  history.pushState(null, null, location.href);
+
+  // If user presses Back, redirect them
+  window.onpopstate = function () {
+    location.href = "index.html";
+  };
+  
+  // Fix for dropdown menu - keep open when moving to options
+  const dropdown = document.querySelector('.dropdown');
+  const dropdownContent = document.querySelector('.dropdown-content');
+  
+  if (dropdown && dropdownContent) {
+    let dropdownTimeout;
+    
+    dropdown.addEventListener('mouseenter', function() {
+      clearTimeout(dropdownTimeout);
+      dropdownContent.style.display = 'block';
+    });
+    
+    dropdown.addEventListener('mouseleave', function() {
+      dropdownTimeout = setTimeout(() => {
+        dropdownContent.style.display = 'none';
+      }, 300);
+    });
+    
+    dropdownContent.addEventListener('mouseenter', function() {
+      clearTimeout(dropdownTimeout);
+    });
+    
+    dropdownContent.addEventListener('mouseleave', function() {
+      dropdownTimeout = setTimeout(() => {
+        dropdownContent.style.display = 'none';
+      }, 100);
+    });
+  }
+
+  // Check if mobile device and adjust UI accordingly
+  if (window.innerWidth <= 768) {
+    // Add touch improvements for mobile
+    document.querySelectorAll('button, a, input[type="submit"]').forEach(element => {
+      element.style.cursor = 'pointer';
+    });
+  }
+};
+</script>
+</body>
+</html>

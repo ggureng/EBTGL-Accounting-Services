@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Client Dashboard - EBTGL Accounting Services</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-blue: #4682B4;
+      --light-blue: #b0c4de;
+      --dark-blue: #2a5a80;
+      --accent-blue: #5a96cf;
+      --light-gray: #f8f9fa;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      scroll-behavior: smooth;
+      background-color: #f2f2f2;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: white;
+      padding: 5px;
+    }
+
+    .logo-text {
+      color: white;
+      font-weight: bold;
+      font-size: 1.8rem;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .nav-links a, .nav-links button {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 600;
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 8px 15px;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover, .nav-links button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Mobile Navigation */
+    .mobile-menu-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 30px;
+      height: 25px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .mobile-menu-toggle span {
+      width: 30px;
+      height: 3px;
+      background-color: white;
+      border-radius: 5px;
+      transition: all 0.3s linear;
+    }
+
+    .mobile-nav-links {
+      display: none;
+      flex-direction: column;
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      padding: 20px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    }
+
+    .mobile-nav-links.active {
+      display: flex;
+    }
+
+    .mobile-nav-links a, .mobile-nav-links button {
+      color: white;
+      text-decoration: none;
+      padding: 15px;
+      margin: 5px 0;
+      text-align: center;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/accounting-hero.jpeg') center/cover no-repeat;
+      height: 90vh;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      animation: fadeInUp 1s ease-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      margin-bottom: 40px;
+    }
+
+    .hero button {
+      margin-top: 20px;
+      padding: 15px 40px;
+      background: linear-gradient(135deg, var(--light-blue), #9bb8d9);
+      border: none;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #333;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .hero button:hover {
+      background: linear-gradient(135deg, #fff, #e0e0e0);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .section {
+      padding: 80px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+      position: relative;
+    }
+
+    .section-title h2 {
+      font-size: 2.5rem;
+      color: var(--dark-blue);
+      margin-bottom: 15px;
+    }
+
+    .section-title:after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-blue), var(--light-blue));
+      margin: 10px auto;
+      border-radius: 2px;
+    }
+
+    .info-section {
+      display: flex;
+      flex-direction: column;
+      gap: 80px;
+    }
+
+    .info-block {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 40px;
+      margin-bottom: 50px;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .info-block:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+
+    .info-block:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .info-block img {
+      width: 45%;
+      height: 400px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .info-block:hover img {
+      transform: scale(1.03);
+    }
+
+    .info-text {
+      width: 55%;
+      padding: 40px;
+      text-align: justify;
+    }
+
+    .info-text h2 {
+      color: var(--dark-blue);
+      font-size: 2rem;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .info-text h2:after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-blue), var(--light-blue));
+      margin: 15px 0;
+      border-radius: 2px;
+    }
+
+    .info-text p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #555;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, var(--light-blue), var(--accent-blue));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+    }
+
+    .feature-card h3 {
+      color: var(--dark-blue);
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+
+    .feature-card p {
+      color: #666;
+      font-size: 1rem;
+    }
+
+    .chat-toggle {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+
+    .chat-toggle:hover {
+      transform: scale(1.1) rotate(10deg);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .chatbox {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 350px;
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      z-index: 100;
+      display: none;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+
+    .chatbox.active {
+      display: block;
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+      color: white;
+      padding: 15px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-messages {
+      height: 300px;
+      padding: 15px;
+      overflow-y: auto;
+      background: var(--light-gray);
+    }
+
+    .message {
+      background: white;
+      border-radius: 10px;
+      padding: 10px 15px;
+      margin-bottom: 15px;
+      max-width: 80%;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .message.admin {
+      background: var(--light-blue);
+      margin-right: auto;
+    }
+
+    .message.user {
+      background: #e6f2ff;
+      margin-left: auto;
+    }
+
+    .chat-input {
+      display: flex;
+      padding: 15px;
+      background: white;
+      border-top: 1px solid #eee;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 30px;
+      font-size: 1rem;
+    }
+
+    .chat-input button {
+      background: var(--primary-blue);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 10px 20px;
+      margin-left: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .chat-input button:hover {
+      background: var(--dark-blue);
+    }
+
+    footer {
+      background: linear-gradient(135deg, var(--dark-blue), var(--primary-blue));
+      color: white;
+      padding: 60px 20px 30px;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      text-align: left;
+    }
+
+    .footer-column h3 {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .footer-column h3:after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 3px;
+      background: var(--light-blue);
+      margin-top: 10px;
+    }
+
+    .footer-column p, .footer-column a {
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 10px;
+      display: block;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .footer-column a:hover {
+      color: white;
+      transform: translateX(5px);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .social-links a:hover {
+      background: var(--light-blue);
+      transform: translateY(-5px);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Popup Styles */
+    .overlay {
+      position: fixed;
+      top: 0; 
+      left: 0;
+      width: 100vw; 
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      z-index: 9999;
+    }
+    
+    .hidden { 
+      display: none; 
+    }
+    
+    .popup {
+      background: #f9f9f9;
+      padding: 30px;
+      border-radius: 15px;
+      width: 100%;
+      max-width: 450px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    
+    .close {
+      position: absolute;
+      top: 15px; 
+      right: 20px;
+      font-size: 28px;
+      cursor: pointer;
+      color: #666;
+    }
+    
+    .field {
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 15px 0;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      transition: border-color 0.3s;
+    }
+    
+    .field:focus {
+      border-color: var(--primary-blue);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.1);
+    }
+    
+    .btn {
+      padding: 12px;
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+      background: linear-gradient(135deg, var(--dark-blue), var(--primary-blue));
+      transform: translateY(-2px);
+    }
+    
+    .toggle-text {
+      font-size: 15px;
+      margin-top: 20px;
+      color: #666;
+    }
+    
+    .toggle-text span, .toggle-text a {
+      color: var(--primary-blue);
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .toggle-text span:hover, .toggle-text a:hover {
+      color: var(--dark-blue);
+    }
+
+    .status-message {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    /* Password field with toggle */
+    .password-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #777;
+      z-index: 2;
+    }
+
+    .password-toggle:hover {
+      color: var(--primary-blue);
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 1024px) {
+      .hero h1 {
+        font-size: 2.8rem;
+      }
+      
+      .hero p {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .info-block, .info-block:nth-child(even) {
+        flex-direction: column;
+      }
+      
+      .info-block img, .info-text {
+        width: 100%;
+      }
+      
+      .info-text {
+        padding: 30px;
+      }
+      
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero p {
+        font-size: 1.2rem;
+      }
+      
+      nav {
+        padding: 15px 20px;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .mobile-menu-toggle {
+        display: flex;
+      }
+      
+      .logo-text {
+        font-size: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .hero {
+        height: 80vh;
+      }
+      
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      
+      .hero p {
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+      }
+      
+      .hero button {
+        padding: 12px 30px;
+        font-size: 1.1rem;
+      }
+      
+      .section {
+        padding: 60px 15px;
+      }
+      
+      .section-title h2 {
+        font-size: 2rem;
+      }
+      
+      .features {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .feature-card {
+        padding: 20px;
+      }
+      
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: center;
+      }
+      
+      .footer-column h3:after {
+        margin: 10px auto;
+      }
+      
+      .social-links {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      .info-text {
+        padding: 20px;
+      }
+      
+      .info-text h2 {
+        font-size: 1.6rem;
+      }
+      
+      .chatbox {
+        width: 90%;
+        right: 5%;
+        left: 5%;
+      }
+      
+      .popup {
+        padding: 20px;
+        margin: 0 15px;
+      }
+      
+      .logo img {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .logo-text {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        height: 70vh;
+      }
+      
+      .hero h1 {
+        font-size: 1.6rem;
+      }
+      
+      .hero button {
+        padding: 10px 25px;
+        font-size: 1rem;
+      }
+      
+      .section-title h2 {
+        font-size: 1.8rem;
+      }
+      
+      .info-block img {
+        height: 250px;
+      }
+      
+      .chat-toggle {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        bottom: 20px;
+        right: 20px;
+      }
+      
+      .chatbox {
+        bottom: 80px;
+      }
+      
+      .footer-column h3 {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .hero h1 {
+        font-size: 1.4rem;
+      }
+      
+      .logo-text {
+        font-size: 1.1rem;
+      }
+      
+      .section-title h2 {
+        font-size: 1.6rem;
+      }
+    }
+        
+    .popup {
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .file-upload-container {
+      margin: 15px 0;
+      text-align: left;
+    }
+
+    .file-label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-custom {
+      display: block;
+      padding: 10px 15px;
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      color: #666;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-hint {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    /* Better scrollbar styling */
+    .popup::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .popup::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+
+    .popup::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 4px;
+    }
+
+    .popup::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+
+    /* Add typing indicator styles */
+    .typing-indicator {
+      background-color: var(--light-blue);
+      padding: 10px 15px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 15px;
+      max-width: 70%;
+    }
+    
+    .typing-indicator span {
+      height: 8px;
+      width: 8px;
+      background-color: var(--dark-blue);
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 5px;
+      animation: bounce 1.3s infinite;
+    }
+    
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    
+    /* FAQ suggestions */
+    .faq-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 15px;
+    }
+    
+    .faq-chip {
+      background-color: rgba(70, 130, 180, 0.1);
+      color: var(--dark-blue);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .faq-chip:hover {
+      background-color: rgba(70, 130, 180, 0.2);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-text">EBTGL Accounting Services</div>
+  </div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="servicesinfo.php">Services</a>
+    <a href="about.html">About Us</a>
+    <button onclick="openConsultPopup()">Log In</button>
+  </div>
+  <button class="mobile-menu-toggle" id="mobileMenuToggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
+<div class="mobile-nav-links" id="mobileNavLinks">
+  <a href="index.html">Home</a>
+  <a href="servicesinfo.php">Services</a>
+  <a href="about.html">About Us</a>
+  <button onclick="openConsultPopup()">Log In</button>
+</div>
+
+<section id="home" class="hero">
+  <div class="hero-content">
+    <h1>Welcome to EBTGL Accounting Services</h1>
+    <p>Reliable. Professional. Accurate. Your trusted financial partner.</p>
+    <button onclick="openConsultPopup()">Consult Now!</button>
+  </div>
+</section>
+
+<section class="section" id="info">
+  <div class="section-title">
+    <h2>Why Accounting Matters</h2>
+    <p>Understanding the fundamentals of financial management</p>
+  </div>
+  
+  <div class="info-section">
+    <div class="info-block">
+      <img src="images/history.jpg" alt="History of Accounting">
+      <div class="info-text">
+        <h2>Brief History of Accounting</h2>
+        <p>Accounting dates back to ancient civilizations where merchants tracked transactions on clay tablets. The double-entry system was developed in Renaissance Italy by Luca Pacioli. Today, accounting has evolved into a sophisticated profession that forms the backbone of modern business, ensuring financial transparency and accountability.</p>
+      </div>
+    </div>
+
+    <div class="info-block">
+      <img src="images/purpose.jpg" alt="Purpose of Accounting">
+      <div class="info-text">
+        <h2>Purpose and Description</h2>
+        <p>Accounting is the systematic process of recording, analyzing, and reporting financial transactions. It provides businesses with critical insights into their financial health, enabling informed decision-making, regulatory compliance, and strategic planning. Through accurate financial statements, accounting tells the story of a business's economic activities.</p>
+      </div>
+    </div>
+
+    <div class="info-block">
+      <img src="images/importance.jpg" alt="Importance of Accounting Partners">
+      <div class="info-text">
+        <h2>Importance of an Accounting Partner</h2>
+        <p>Having a trusted accounting partner provides expertise, saves time, ensures accuracy, and keeps businesses financially healthy. It allows business owners to focus on growth while maintaining regulatory compliance and profitability. A professional accounting partner becomes a strategic advisor, helping navigate complex financial landscapes and identifying opportunities for improvement.</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="section-title">
+    <h2>Our Key Features</h2>
+    <p>What makes EBTGL Accounting Services stand out</p>
+  </div>
+  
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-shield-alt"></i>
+      </div>
+      <h3>Automated Bookkeeping and Reporting</h3>
+      <p>Seamlessly handles data entry and generates instant financial reports.</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <h3>AI Forecasting and Recommendations</h3>
+      <p>Predicts future financial trends and provides actionable advice.</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-headset"></i>
+      </div>
+      <h3>Real-Time<br>Financial Advisory</br></h3>
+      <p>Enables real-time messaging with an expert for immediate planning.</p>
+    </div>
+  </div>
+</section>
+
+<div class="chat-toggle" onclick="toggleChat()">
+  <i class="fas fa-comment-dots"></i>
+</div>
+
+<div class="chatbox" id="chatbox">
+  <div class="chat-header" onclick="toggleChat()">
+    <i class="fas fa-comments me-2"></i> Accounting Assistant
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="message admin">
+      <strong>Hello!</strong> I'm EBTGL's Accounting Assistant. How can I help you today? Here are some common questions:
+      <div class="faq-suggestions">
+        <div class="faq-chip" onclick="sendSuggestedQuestion(this)">What services do you offer?</div>
+        <div class="faq-chip" onclick="sendSuggestedQuestion(this)">How much do services cost?</div>
+        <div class="faq-chip" onclick="sendSuggestedQuestion(this)">How do I submit documents?</div>
+        <div class="faq-chip" onclick="sendSuggestedQuestion(this)">What are your working hours?</div>
+      </div>
+    </div>
+  </div>
+  <div class="chat-input">
+    <input type="text" id="chatInput" placeholder="Ask about accounting services..." onkeypress="handleKeyPress(event)">
+    <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-column">
+      <h3>EBTGL Accounting Services</h3>
+      <p>Providing professional accounting services with accuracy, integrity, and personalized attention to help your business thrive.</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/p/EB-Tarobal-Co-CPAs-100063656455449/"><i class="fab fa-facebook-f"></i></a>
+      </div>
+    </div>
+    
+    <div class="footer-column">
+      <h3>Quick Links</h3>
+      <a href="index.html">Home</a>
+      <a href="servicesinfo.php">Services</a>
+      <a href="about.html">About Us</a>
+      <a href="#" onclick="openConsultPopup()">Client Login</a>
+    </div>
+    
+    <div class="footer-column">
+      <h3>Our Services</h3>
+      <a href="servicesinfo.php">Bookkeeping</a>
+      <a href="servicesinfo.php">Financial Reporting</a>
+    </div>
+    
+    <div class="footer-column">
+      <h3>Contact Us</h3>
+      <p><i class="fas fa-map-marker-alt me-2"></i> Brgy Tibagan, San Juan City</p>
+      <p><i class="fas fa-phone me-2"></i> (02) 8123-4567</p>
+      <p><i class="fas fa-envelope me-2"></i> ebtgl5220712@gmail.com</p>
+      <p><i class="fas fa-clock me-2"></i> Mon-Fri: 8AM - 5PM</p>
+    </div>
+  </div>
+  
+  <div class="copyright">
+    &copy; 2025 EBTGL Accounting Services. All rights reserved.
+  </div>
+</footer>
+
+<!-- LOGIN POPUP -->
+<div id="popupOverlay" class="overlay hidden">
+  <div class="popup">
+    <span class="close" onclick="closeConsultPopup()">&times;</span>
+    <div id="loginForm">
+      <h2>Login</h2>
+      <form id="loginFormElement">
+        <input type="text" id="loginUsername" placeholder="Username" class="field" required>
+        
+        <div class="password-container">
+          <input type="password" id="loginPassword" placeholder="Password" class="field" required>
+          <i class="fas fa-eye password-toggle" id="loginPasswordToggle"></i>
+        </div>
+        
+        <button type="submit" class="btn">Log In</button>
+      </form>
+      <p class="toggle-text">Don't have an account yet? <span onclick="showSignup()">Sign up</span></p>
+      <p class="toggle-text">
+        <a onclick="showForgotPassword()" style="color: #007bff; text-decoration: underline;">Forgot Password?</a>
+      </p>
+    </div>
+    
+    <!-- SIGNUP FORM -->
+    <div id="signupForm" class="hidden">
+      <h2>Create Account & Request Consultation</h2>
+      <form method="POST" action="signup.php" enctype="multipart/form-data" id="signupConsultForm">
+        <!-- Signup Fields -->
+        <input type="email" name="email" placeholder="Company Email Address" class="field" required>
+        <input type="text" name="username" placeholder="Username" class="field" required>
+        
+        <div class="password-container">
+          <input type="password" name="password" id="signupPassword" placeholder="Password" class="field" required>
+          <i class="fas fa-eye password-toggle" id="signupPasswordToggle"></i>
+        </div>
+        
+        <!-- Consultation Fields -->
+        <input type="text" name="company_name" placeholder="Company Name" class="field" required>
+        <input type="tel" name="phone" placeholder="Company Phone Number (optional)" class="field" pattern="^09\d{9}$" title="Must start with 09 and be exactly 11 digits if filled.">
+        <input type="text" name="full_name" placeholder="Full Name" class="field" required>
+        <input type="text" name="position" placeholder="Position in the Company" class="field" required>
+        
+        <div class="file-upload-container">
+          <label for="permit" class="file-label">Business Permits and Licenses:</label>
+          <div class="file-input-wrapper">
+            <input type="file" name="permit" id="permit" required>
+            <span class="file-custom" id="fileCustomText">Choose file...</span>
+          </div>
+          <div class="file-hint">Please upload a clear copy of your business permits and licenses (PDF, JPG, PNG)</div>
+        </div>
+        
+        <button type="submit" class="btn">Create Account & Submit Request</button>
+      </form>
+      <p class="toggle-text">Already have an account? <span onclick="showLogin()">Log in</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- FORGOT PASSWORD POPUP -->
+<div id="forgotPasswordPopup" class="overlay hidden">
+  <div class="popup">
+    <span class="close" onclick="closeForgotPasswordPopup()">&times;</span>
+    <h2>Forgot Password</h2>
+    <form id="forgotPasswordForm">
+      <input type="email" id="resetEmail" placeholder="Enter your registered email" class="field" required>
+      <button type="submit" class="btn">Send OTP</button>
+    </form>
+    <p class="status-message" id="resetStatus"></p>
+  </div>
+</div>
+
+<!-- OTP VERIFICATION POPUP -->
+<div id="otpPopupOverlay" class="overlay hidden">
+  <div class="popup">
+    <span class="close" onclick="closeOtpPopup()">&times;</span>
+    <h3>Enter OTP & New Password</h3>
+    <form id="resetForm">
+      <input type="text" id="enteredOtp" placeholder="Enter OTP" class="field" required>
+      
+      <div class="password-container">
+        <input type="password" id="newPassword" placeholder="New Password" class="field" required>
+        <i class="fas fa-eye password-toggle" id="newPasswordToggle"></i>
+      </div>
+      
+      <button type="submit" class="btn">Reset Password</button>
+    </form>
+    <p id="resetFeedback" class="status-message"></p>
+  </div>
+</div>
+
+<script>
+  // Mobile menu toggle
+  document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+    document.getElementById('mobileNavLinks').classList.toggle('active');
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', function(event) {
+    const mobileMenu = document.getElementById('mobileNavLinks');
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    
+    if (mobileMenu.classList.contains('active') && 
+        !mobileMenu.contains(event.target) && 
+        !menuToggle.contains(event.target)) {
+      mobileMenu.classList.remove('active');
+    }
+  });
+
+  // File name display functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('permit');
+    const fileCustomText = document.getElementById('fileCustomText');
+    
+    if (fileInput && fileCustomText) {
+      fileInput.addEventListener('change', function(e) {
+        if (this.files && this.files.length > 0) {
+          const fileName = this.files[0].name;
+          fileCustomText.textContent = fileName;
+        } else {
+          fileCustomText.textContent = 'Choose file...';
+        }
+      });
+    }
+  });
+
+  // Password toggle functionality
+  function setupPasswordToggle(toggleId, passwordId) {
+    const toggle = document.getElementById(toggleId);
+    const password = document.getElementById(passwordId);
+    
+    if (toggle && password) {
+      toggle.addEventListener('click', function() {
+        // Toggle the password visibility
+        if (password.type === 'password') {
+          password.type = 'text';
+          toggle.classList.remove('fa-eye');
+          toggle.classList.add('fa-eye-slash');
+        } else {
+          password.type = 'password';
+          toggle.classList.remove('fa-eye-slash');
+          toggle.classList.add('fa-eye');
+        }
+      });
+    }
+  }
+
+  // Initialize password toggles
+  setupPasswordToggle('loginPasswordToggle', 'loginPassword');
+  setupPasswordToggle('signupPasswordToggle', 'signupPassword');
+  setupPasswordToggle('newPasswordToggle', 'newPassword');
+
+  // Accounting knowledge base
+  const accountingFAQ = [
+    {
+      question: "services",
+      answers: [
+        "We offer a comprehensive range of accounting services including:",
+        "- Digital Bookkeeping",
+        "- AI Forecasting and Recommendations",
+        "- Financial Report Generation",
+        "- Real-Time Financial Advisory",
+        "Which service are you interested in?"
+      ]
+    },
+    {
+      question: "cost|pricing|price|how much",
+      answers: [
+        "Our pricing depends on the complexity of your accounting needs:",
+        "- Basic bookkeeping starts at $150/month",
+        "- Tax preparation ranges from $300-$800 depending on complexity",
+        "- Full-service accounting packages start at $500/month",
+        "We offer a free initial consultation to assess your needs and provide an exact quote."
+      ]
+    },
+    {
+      question: "documents|submit|upload|send",
+      answers: [
+        "You can securely submit documents through our client portal:",
+        "1. Log in to your account at jt-acc-sys.unaux.com",
+        "2. Go to the 'Message' section",
+        "3. Click 'Upload Files' and select your financial documents",
+        "We accept PDF, JPG, and Excel files. For large files, contact us for secure transfer options."
+      ]
+    },
+    {
+      question: "hours|open|time|available",
+      answers: [
+        "Our office hours are:",
+        "- Monday to Friday: 8:00 AM - 6:00 PM",
+        "- Saturday: 9:00 AM - 2:00 PM",
+        "- Sunday: Closed",
+        "Outside these hours, you can leave a message and we'll respond within 24 business hours."
+      ]
+    },
+    {
+      question: "tax|irs|deadline|file",
+      answers: [
+        "Important tax deadlines:",
+        "- Individual tax returns: April 15",
+        "- Corporate tax returns: March 15",
+        "- Quarterly estimated payments: April 15, June 15, September 15, January 15",
+        "We recommend submitting your documents at least 30 days before deadlines to avoid late filing."
+      ]
+    },
+    {
+      question: "portal|login|access|client",
+      answers: [
+        "To access the client portal:",
+        "1. Visit client.ebtgl-accounting.com",
+        "2. Enter your username and password",
+        "If you've forgotten your credentials, click 'Forgot Password' or contact our support team.",
+        "The portal allows you to view financial reports, upload documents, and message your accountant."
+      ]
+    },
+    {
+      question: "hello|hi|hey",
+      answers: [
+        "Hello! How can I assist you with your accounting needs today?",
+        "You can ask about our services, pricing, document submission, or deadlines."
+      ]
+    },
+    {
+      question: "thank|thanks|appreciate",
+      answers: [
+        "You're welcome! 😊",
+        "Is there anything else I can help you with today?"
+      ]
+    }
+  ];
+
+  // Chat functions
+  function toggleChat() {
+    const chatbox = document.getElementById('chatbox');
+    chatbox.classList.toggle('active');
+  }
+
+  // Handle Enter key press
+  function handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  }
+
+  // Send message from FAQ chips
+  function sendSuggestedQuestion(element) {
+    const question = element.textContent;
+    document.getElementById('chatInput').value = question;
+    sendMessage();
+  }
+
+  // Send user message
+  function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    
+    if (message) {
+      const messagesDiv = document.getElementById('chatMessages');
+      
+      // Add user message
+      const userMessage = document.createElement('div');
+      userMessage.className = 'message user';
+      userMessage.textContent = message;
+      messagesDiv.appendChild(userMessage);
+      
+      // Clear input
+      input.value = '';
+      
+      // Scroll to bottom
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      
+      // Show typing indicator
+      const typingIndicator = document.createElement('div');
+      typingIndicator.className = 'typing-indicator';
+      typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+      messagesDiv.appendChild(typingIndicator);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      
+      // Get bot response after delay
+      setTimeout(() => {
+        messagesDiv.removeChild(typingIndicator);
+        getBotResponse(message);
+      }, 1000 + Math.random() * 1000);
+    }
+  }
+
+  // Get bot response from knowledge base
+  function getBotResponse(userMessage) {
+    const messagesDiv = document.getElementById('chatMessages');
+    const normalizedMessage = userMessage.toLowerCase();
+    
+    let responseFound = false;
+    
+    // Try to find matching question
+    for (const faq of accountingFAQ) {
+      const keywords = faq.question.split('|');
+      for (const keyword of keywords) {
+        if (normalizedMessage.includes(keyword)) {
+          responseFound = true;
+          const botMessage = document.createElement('div');
+          botMessage.className = 'message admin';
+          
+          // Create HTML for multiple answers
+          let answersHTML = '';
+          for (const answer of faq.answers) {
+            answersHTML += `<div>${answer}</div>`;
+          }
+          
+          botMessage.innerHTML = answersHTML;
+          messagesDiv.appendChild(botMessage);
+          break;
+        }
+      }
+      if (responseFound) break;
+    }
+    
+    // Default response if no match found
+    if (!responseFound) {
+      const botMessage = document.createElement('div');
+      botMessage.className = 'message admin';
+      botMessage.innerHTML = `
+        I'm not sure I understand. Could you rephrase your question?<br>
+        Here are some topics I can help with:
+        <div class="faq-suggestions">
+          <div class="faq-chip" onclick="sendSuggestedQuestion(this)">Services offered</div>
+          <div class="faq-chip" onclick="sendSuggestedQuestion(this)">Pricing information</div>
+          <div class="faq-chip" onclick="sendSuggestedQuestion(this)">Document submission</div>
+          <div class="faq-chip" onclick="sendSuggestedQuestion(this)">Tax deadlines</div>
+        </div>
+      `;
+      messagesDiv.appendChild(botMessage);
+    }
+    
+    // Scroll to bottom
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+
+  // Login popup functions
+  function openConsultPopup() {
+    document.getElementById("popupOverlay").classList.remove("hidden");
+    showLogin();
+    // Close mobile menu if open
+    document.getElementById('mobileNavLinks').classList.remove('active');
+  }
+  
+  function closeConsultPopup() {
+    document.getElementById("popupOverlay").classList.add("hidden");
+  }
+  
+  function showSignup() {
+    document.getElementById("loginForm").classList.add("hidden");
+    document.getElementById("signupForm").classList.remove("hidden");
+  }
+  
+  function showLogin() {
+    document.getElementById("signupForm").classList.add("hidden");
+    document.getElementById("loginForm").classList.remove("hidden");
+  }
+  
+  function showForgotPassword() {
+    document.getElementById('popupOverlay').classList.add('hidden');
+    document.getElementById('forgotPasswordPopup').classList.remove('hidden');
+  }
+  
+  function closeForgotPasswordPopup() {
+    document.getElementById('forgotPasswordPopup').classList.add('hidden');
+    document.getElementById('popupOverlay').classList.remove('hidden');
+  }
+  
+  function closeOtpPopup() {
+    document.getElementById('otpPopupOverlay').classList.add('hidden');
+  }
+
+  // Form submission handlers
+  document.getElementById("loginFormElement").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const username = document.getElementById("loginUsername").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
+
+    fetch("login.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === "success") {
+            // Set sessionStorage flags
+            if (data.role === "admin") {
+                sessionStorage.setItem("admin_logged_in", "true");
+            } else if (data.role === "client") {
+                sessionStorage.setItem("client_logged_in", "true");
+            }
+
+            alert(data.message);
+            window.location.href = data.redirect;
+
+        } else if (data.status === "pending") {
+            alert(data.message);
+        } else {
+            alert(data.message); // for "error"
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Something went wrong. Please try again.");
+    });
+  });
+
+  document.getElementById('forgotPasswordForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const email = document.getElementById('resetEmail').value;
+    const status = document.getElementById('resetStatus');
+
+    fetch('send_otp.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    })
+      .then(res => res.json())
+      .then(data => {
+        status.textContent = data.message;
+        status.style.color = data.success ? 'green' : 'red';
+
+        if (data.success) {
+          // Close forgot popup and show OTP popup
+          document.getElementById('forgotPasswordPopup').classList.add('hidden');
+          document.getElementById('otpPopupOverlay').classList.remove('hidden');
+        }
+      });
+  });
+
+  document.getElementById('resetForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const otp = document.getElementById('enteredOtp').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const feedback = document.getElementById('resetFeedback');
+
+    fetch('verify_otp.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ otp, password: newPassword })
+    })
+      .then(res => res.json())
+      .then(data => {
+        feedback.textContent = data.message;
+        feedback.style.color = data.success ? 'green' : 'red';
+
+        if (data.success) {
+          setTimeout(() => {
+            closeOtpPopup();
+            alert("Password reset! Please log in again.");
+          }, 1500);
+        }
+      });
+  });
+
+  // Force page reload when back button is pressed after logout
+  window.onload = function () {
+    // Prevent caching
+    if (performance.navigation.type === performance.navigation.TYPE_BACK_FORWARD) {
+      window.location.reload(true);
+    }
+
+    // Optional: Check if sessionStorage says user is logged out
+    if (sessionStorage.getItem('logged_out') === 'yes') {
+      sessionStorage.removeItem('logged_out');
+      window.location.href = 'index.html'; // or your login page
+    }
+
+    // Push a new state so we can detect back
+    history.pushState(null, null, location.href);
+
+    // If user presses Back, redirect them
+    window.onpopstate = function () {
+      location.href = "index.html";
+    };
+  };
+
+  function logout() {
+    window.location.href = 'index.html';
+  }
+</script>
+
+</body>
+</html>
